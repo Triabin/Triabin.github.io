@@ -1,0 +1,344 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>项目三：开发团队调度软件 | Triabin</title><meta name="description" content="目标 模拟实现一个基于文本界面的《开发团队调度软件》。  熟悉Java面向对象的高级特性，进一步掌握编程技巧和调试技巧。  主要设计以下知识点： ① 类的继承和多态性 ② 对象的值传递、接口 ③ static和final修饰符 ④ 特殊类的使用：包装类、抽象类、内部类 ⑤ 异常处理   需求说明 该软件运行时实现以下功能： ①软件启动时，根据给定的数据创建公司部分成员列表（数组） ②根据菜单提示，"><meta name="keywords" content="JavaProject"><meta name="author" content="Dawn Lee"><meta name="copyright" content="Dawn Lee"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://triabin.github.io/2020/10/16/%E9%A1%B9%E7%9B%AE%E4%B8%89/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="项目三：开发团队调度软件"><meta property="og:url" content="https://triabin.github.io/2020/10/16/%E9%A1%B9%E7%9B%AE%E4%B8%89/"><meta property="og:site_name" content="Triabin"><meta property="og:description" content="目标 模拟实现一个基于文本界面的《开发团队调度软件》。  熟悉Java面向对象的高级特性，进一步掌握编程技巧和调试技巧。  主要设计以下知识点： ① 类的继承和多态性 ② 对象的值传递、接口 ③ static和final修饰符 ④ 特殊类的使用：包装类、抽象类、内部类 ⑤ 异常处理   需求说明 该软件运行时实现以下功能： ①软件启动时，根据给定的数据创建公司部分成员列表（数组） ②根据菜单提示，"><meta property="og:image" content="https://gitee.com/Dawn_Lee/blogimg/raw/master/20201016225736.jpeg"><meta property="article:published_time" content="2020-10-16T14:34:27.000Z"><meta property="article:modified_time" content="2020-10-16T16:44:24.059Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
+
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
+
+var autoChangeMode = 'false'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime_unit: '天',
+  runtime: true,
+  copyright: undefined,
+  ClickShowText: {"text":"楼主,是,真的,帅","fontSize":"15px"},
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false    
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2020-10-17 00:44:24'
+}</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 5.0.0"></head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="https://gitee.com/Dawn_Lee/blogimg/raw/master/20200907120319.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">10</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">3</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">3</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div id="body-wrap"><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87"><span class="toc-number">1.</span> <span class="toc-text">目标</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9C%80%E6%B1%82%E8%AF%B4%E6%98%8E"><span class="toc-number">2.</span> <span class="toc-text">需求说明</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E7%BB%93%E6%9E%84"><span class="toc-number">3.</span> <span class="toc-text">软件设计结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC1%E6%AD%A5-%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E5%9F%BA%E6%9C%AC%E7%BB%84%E4%BB%B6"><span class="toc-number">3.1.</span> <span class="toc-text">第1步 创建项目基本组件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Equipment%E6%8E%A5%E5%8F%A3%E5%8F%8A%E5%85%B6%E5%AE%9E%E7%8E%B0%E5%AD%90%E7%B1%BB%E7%9A%84%E8%AE%BE%E8%AE%A1"><span class="toc-number">3.1.1.</span> <span class="toc-text">Equipment接口及其实现子类的设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Employee%E7%B1%BB%E5%8F%8A%E5%85%B6%E5%AD%90%E7%B1%BB%E7%9A%84%E8%AE%BE%E8%AE%A1"><span class="toc-number">3.1.2.</span> <span class="toc-text">Employee类及其子类的设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Status%E7%B1%BB"><span class="toc-number">3.1.3.</span> <span class="toc-text">Status类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Employee%E7%B1%BB%E5%8F%8A%E5%85%B6%E5%AD%90%E7%B1%BB%E7%9A%84%E8%AE%BE%E8%AE%A1-1"><span class="toc-number">3.1.4.</span> <span class="toc-text">Employee类及其子类的设计</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC2%E6%AD%A5-%E5%AE%9E%E7%8E%B0service%E5%8C%85%E4%B8%AD%E7%9A%84%E7%B1%BB"><span class="toc-number">3.2.</span> <span class="toc-text">第2步 实现service包中的类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NameListService%E7%B1%BB%E7%9A%84%E8%AE%BE%E8%AE%A1"><span class="toc-number">3.2.1.</span> <span class="toc-text">NameListService类的设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TeamService%E7%B1%BB%E7%9A%84%E8%AE%BE%E8%AE%A1"><span class="toc-number">3.2.2.</span> <span class="toc-text">TeamService类的设计</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC3%E6%AD%A5-%E5%AE%9E%E7%8E%B0view%E5%8C%85%E4%B8%AD%E7%9A%84%E7%B1%BB"><span class="toc-number">3.3.</span> <span class="toc-text">第3步 实现view包中的类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#TeamView%E7%B1%BB%E7%9A%84%E8%AE%BE%E8%AE%A1"><span class="toc-number">3.3.1.</span> <span class="toc-text">TeamView类的设计</span></a></li></ol></li></ol></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://gitee.com/Dawn_Lee/blogimg/raw/master/20201016225626.jpeg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">Triabin</a></span><span class="pull-right menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">项目三：开发团队调度软件</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-10-16T14:34:27.000Z" title="发表于 2020-10-16 22:34:27">2020-10-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2020-10-16T16:44:24.059Z" title="更新于 2020-10-17 00:44:24">2020-10-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h1 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h1><ul>
+<li><p>模拟实现一个基于文本界面的《开发团队调度软件》。</p>
+</li>
+<li><p>熟悉Java面向对象的高级特性，进一步掌握编程技巧和调试技巧。</p>
+</li>
+<li><p><font color="red">主要设计以下知识点：</font></p>
+<p><font color="red">① 类的继承和多态性</font></p>
+<p><font color="red">② 对象的值传递、接口</font></p>
+<p><font color="red">③ static和final修饰符</font></p>
+<p><font color="red">④ 特殊类的使用：包装类、抽象类、内部类</font></p>
+<p><font color="red">⑤ 异常处理</font></p>
+</li>
+</ul>
+<h1 id="需求说明"><a href="#需求说明" class="headerlink" title="需求说明"></a>需求说明</h1><ul>
+<li><p><strong>该软件运行时实现以下功能：</strong></p>
+<p>①软件启动时，根据给定的数据创建公司部分成员列表（数组）</p>
+<p>②根据菜单提示，基于现有的<u>公司成员</u>，组建一个<u>开发团队</u>以开发一个新的项目</p>
+<p>③组建过程中包括将成员插入到团队中，或从团队中删除某成员，还可以列出团队中现有成员的列表</p>
+<p>④开发团队成员包括架构师、设计师和程序员</p>
+</li>
+<li><p><strong>本软件采用单级菜单方式工作。当软件运行时，主界面显示公司成员的列表，如下：</strong></p>
+<p><font color="blue">————————————-开发团队调度软件————————————–</font></p>
+</li>
+</ul>
+<p>  <font color="blue">ID   姓名   年龄  工资     职位   状态   奖金    股票   领用设备</font></p>
+<p>  <font color="blue"> 1   马 云   22   3000.0</font></p>
+<p>  <font color="blue"> 2   马化腾  32    18000.0 架构师  FREE  15000.0  2000  联想T4(6000.0)</font></p>
+<p>  <font color="blue"> 3   李彦宏  23    7000.0  程序员  FREE                戴尔(NEC17寸)</font></p>
+<p>  <font color="blue"> 4   刘强东  24    7300.0  程序员  FREE                戴尔(三星 17寸)</font></p>
+<p>  <font color="blue"> 5   雷军   28    10000.0 设计师  FREE  5000.0         佳能 2900(激光)</font></p>
+<p>  <font color="blue"> ……</font></p>
+<p>  <font color="blue">-———————————————————————————————</font></p>
+<p>  <font color="blue">1-团队列表 2-添加团队成员 3-删除团队成员 4-退出  请选择(1-4)： _</font></p>
+<ul>
+<li><p><strong>当选择“<font color="red">添加团队成员</font>”菜单时，将执行从列表中添加指定（通过ID）成员到<u>开发团队</u>的功能：</strong></p>
+<p><font color="blue">1-团队列表 2-添加团队成员 3-删除团队成员 4-退出  请选择(1-4)：2</font></p>
+</li>
+</ul>
+<p>  <font color="blue">———————添加成员———————</font></p>
+<p>  <font color="blue">请输入要添加的员工ID：2</font></p>
+<p>  <font color="blue">添加成功</font></p>
+<p>  <font color="blue">按回车键继续…</font></p>
+<p>  添加成功后，按回车键将重新显示主界面。</p>
+<ul>
+<li><p><strong><font color="blue">开发团队人员组成要求：</font></strong></p>
+<p><font color="blue">–最多一名架构师</font></p>
+<p><font color="blue">–最多两名设计师</font></p>
+<p><font color="blue">–最多三名程序员</font></p>
+</li>
+<li><p><strong>如果添加操作因为某种原因失败，将显示类似以下信息（失败原因视具体原因而不同）：</strong></p>
+<img src="https://gitee.com/Dawn_Lee/blogimg/raw/master/20201017001019.png" align="left">
+
+<p><strong><font color="red">失败信心包含以下几种：</font></strong></p>
+<p><font color="red">①成员已满，无法添加</font></p>
+<p><font color="red">②该成员不是开发人员，无法添加</font></p>
+<p><font color="red">③该员工已在本开发团队中</font></p>
+<p><font color="red">④该员工已是某团队成员</font></p>
+<p><font color="red">⑤该员工正在休假，无法添加</font></p>
+<p><font color="red">⑥团队中至多只能有一名架构师</font></p>
+<p><font color="red">⑦团队中至多只能有两名设计师</font></p>
+<p><font color="red">⑧团队中至多只能有三名程序员</font></p>
+</li>
+<li><p><strong>当选择“<font color="red">删除团队成员</font>”菜单时，将执行从<u>开发团队</u>中删除指定（通过TeamID）成员的功能：</strong></p>
+<img src="https://gitee.com/Dawn_Lee/blogimg/raw/master/20201017001819.png" align="left">
+
+<p>删除成功后，按回车键将重新显示主界面。</p>
+</li>
+<li><p><strong>当选择“<font color="red">团队列表</font>”菜单时，将列出开发团队中的现有成员，例如：</strong></p>
+<img src="https://gitee.com/Dawn_Lee/blogimg/raw/master/20201017002034.png" align="left">
+
+</li>
+</ul>
+<h1 id="软件设计结构"><a href="#软件设计结构" class="headerlink" title="软件设计结构"></a>软件设计结构</h1><ul>
+<li><p>该软件由以下三个模块组成：</p>
+<img src="https://gitee.com/Dawn_Lee/blogimg/raw/master/20201017002216.png" align="left">
+
+<p>①com.atguigu.team.view模块为主控模块，负责菜单的显示和处理用户操作。</p>
+<p>②com.atguigu.team.service模块为实体对象（Employee及其子类如程序员等）的管理模块， NameListService和TeamService类分别用各自的数组来管理公司员工和开发团队成员对象。</p>
+<p>③domain模块为Employee及其子类等JavaBean类所在的包。</p>
+</li>
+<li><p>com.atguigu.team.domain模块中包含了所有实体类：</p>
+<img src="https://gitee.com/Dawn_Lee/blogimg/raw/master/20201017002540.png" align="left">
+
+<p>其中程序员(Programmer)及其子类，均会领用某种电子设备(Equipment)。</p>
+</li>
+</ul>
+<h2 id="第1步-创建项目基本组件"><a href="#第1步-创建项目基本组件" class="headerlink" title="第1步 创建项目基本组件"></a>第1步 创建项目基本组件</h2><ul>
+<li><p>完成以下工作：</p>
+<ol>
+<li>创建TeamSchedule项目</li>
+<li>按照设计要求创建所有包</li>
+<li>将项目提供的几个类复制到相应的包中<font color="blue">（view包中：TSUtility.java；service包中：Data.java）</font></li>
+</ol>
+</li>
+<li><p>按照设计要求，在com.atguigu.team.domain包中，创建Equipment接 </p>
+<p>  口及其各实现子类代码。</p>
+</li>
+<li><p>按照设计要求，在com.atguigu.team.domain包中，创建Employee类</p>
+<p>  及其各子类代码。</p>
+</li>
+<li><p>检验代码的正确性。</p>
+</li>
+<li><p>项目view包中提供了TSUtility.java类，可用来方便地实现键盘访问。</p>
+</li>
+<li><p>该类提供了以下静态方法：</p>
+<ol>
+<li><p>public static char readMenuSelection() </p>
+<p><strong>用途：</strong>该方法读取键盘，如果用户键入’1’-’4’中的任意字符，则方法返回。返回值为用户键入字符。</p>
+</li>
+<li><p>public static void readReturn() </p>
+<p><strong>用途：</strong>该方法提示并等待，直到用户按回车键后返回。</p>
+</li>
+<li><p>public static int readInt() </p>
+<p><strong>用途：</strong>该方法从键盘读取一个长度不超过2位的整数，并将其作为方法的返回值。</p>
+</li>
+<li><p>public static char readConfirmSelection() </p>
+<p><strong>用途：</strong>从键盘读取‘Y’或’N’，并将其作为方法的返回值。</p>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="Equipment接口及其实现子类的设计"><a href="#Equipment接口及其实现子类的设计" class="headerlink" title="Equipment接口及其实现子类的设计"></a>Equipment接口及其实现子类的设计</h3><table>
+<thead>
+<tr>
+<th>&lt;&lt;interface&gt;&gt;<br>Equipment</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+</tr>
+<tr>
+<td>+getDescription():String</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>PC</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-model:String<br>-display:String</td>
+</tr>
+<tr>
+<td>+ PC(model: String, display: String)</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>NoteBook</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-model:String<br>-price:double</td>
+</tr>
+<tr>
+<td>+NoteBook(model:String,price:double)</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Printer</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-name:String<br>-type:String</td>
+</tr>
+<tr>
+<td>+Printer(name:String,type:String)</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>说明：</p>
+<p>model表示机器的型号</p>
+<p>display表示显示器名称</p>
+<p>type表示机器的类型</p>
+</li>
+<li><p>根据需要提供各属性的get/set方法以及重载构造器</p>
+</li>
+<li><p>实现类实现接口的方法，返回各自属性的信息</p>
+</li>
+</ul>
+<h3 id="Employee类及其子类的设计"><a href="#Employee类及其子类的设计" class="headerlink" title="Employee类及其子类的设计"></a>Employee类及其子类的设计</h3><table>
+<thead>
+<tr>
+<th>Employee</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+</tr>
+<tr>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="Status类"><a href="#Status类" class="headerlink" title="Status类"></a>Status类</h3><h3 id="Employee类及其子类的设计-1"><a href="#Employee类及其子类的设计-1" class="headerlink" title="Employee类及其子类的设计"></a>Employee类及其子类的设计</h3><h2 id="第2步-实现service包中的类"><a href="#第2步-实现service包中的类" class="headerlink" title="第2步 实现service包中的类"></a>第2步 实现service包中的类</h2><h3 id="NameListService类的设计"><a href="#NameListService类的设计" class="headerlink" title="NameListService类的设计"></a>NameListService类的设计</h3><h3 id="TeamService类的设计"><a href="#TeamService类的设计" class="headerlink" title="TeamService类的设计"></a>TeamService类的设计</h3><h2 id="第3步-实现view包中的类"><a href="#第3步-实现view包中的类" class="headerlink" title="第3步 实现view包中的类"></a>第3步 实现view包中的类</h2><h3 id="TeamView类的设计"><a href="#TeamView类的设计" class="headerlink" title="TeamView类的设计"></a>TeamView类的设计</h3></div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Dawn Lee</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://triabin.github.io/2020/10/16/%E9%A1%B9%E7%9B%AE%E4%B8%89/">https://triabin.github.io/2020/10/16/%E9%A1%B9%E7%9B%AE%E4%B8%89/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://triabin.github.io" target="_blank">Triabin</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/JavaProject/">JavaProject</a></div><div class="post_share"><div class="social-share" data-image="https://gitee.com/Dawn_Lee/blogimg/raw/master/20201016225736.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏<div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" data-lazy-src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2020/10/03/%E7%AC%AC7%E7%AB%A0%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/"><img class="next-cover" data-lazy-src="https://gitee.com/Dawn_Lee/blogimg/raw/master/20201003141102.jpeg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">第7章异常处理</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2020/08/10/项目二/" title="项目二：客户信息管理软件"><img class="relatedPosts_cover" data-lazy-src="https://gitee.com/Dawn_Lee/blogimg/raw/master/20200810143627.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2020-08-10</div><div class="relatedPosts_title">项目二：客户信息管理软件</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></article></main><footer id="footer" style="background-image: url(https://gitee.com/Dawn_Lee/blogimg/raw/master/20201016225626.jpeg)" data-type="photo"><div id="footer-wrap"><div class="copyright">&copy;2020 By Dawn Lee</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">欢迎来<a href = "https://triabin.github.io">我的主页</a>玩耍！</div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font_plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font_minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    $.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js', function () {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'default',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script><script>function loadValine () {
+  function initValine () {
+    window.valine = new Valine({
+      el: '#vcomment',
+      appId: 'nRm5ghh8KBTpFriUNsAIXkHX-gzGzoHsz',
+      appKey: 'MQA4jhYIWo2EHHXXwUXz3oOj',
+      placeholder: '记得留下你的昵称和邮箱……可以快速收到回复',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+    });
+    if ('nick,mail') { valine.config.requiredFields= 'nick,mail'.split(',') }
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><canvas class="fireworks"></canvas><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="/js/third-party/fireworks.js"></script><script defer="defer" id="ribbon_piao" mobile="true" src="/js/third-party/piao.js"></script><script src="/js/third-party/activate-power-mode.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script src="/js/third-party/click_heart.js" async="async"></script><script src="/js/third-party/ClickShowText.js" async="async"></script></div></body></html>
