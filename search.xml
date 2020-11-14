@@ -4,13 +4,25 @@
   
     
     <entry>
-      <title>test</title>
-      <link href="/2020/11/09/test/"/>
-      <url>/2020/11/09/test/</url>
+      <title>第10章枚举类与注解</title>
+      <link href="/2020/11/14/%E7%AC%AC10%E7%AB%A0%E6%9E%9A%E4%B8%BE%E7%B1%BB%E4%B8%8E%E6%B3%A8%E8%A7%A3/"/>
+      <url>/2020/11/14/%E7%AC%AC10%E7%AB%A0%E6%9E%9A%E4%B8%BE%E7%B1%BB%E4%B8%8E%E6%B3%A8%E8%A7%A3/</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<h1 id="枚举类的使用"><a href="#枚举类的使用" class="headerlink" title="枚举类的使用"></a>枚举类的使用</h1><h2 id="如何自定义枚举类"><a href="#如何自定义枚举类" class="headerlink" title="如何自定义枚举类"></a>如何自定义枚举类</h2><h2 id="如何使用关键字enum定义枚举类"><a href="#如何使用关键字enum定义枚举类" class="headerlink" title="如何使用关键字enum定义枚举类"></a>如何使用关键字enum定义枚举类</h2><h2 id="Enum类的主要方法"><a href="#Enum类的主要方法" class="headerlink" title="Enum类的主要方法"></a>Enum类的主要方法</h2><h2 id="实现接口的枚举类"><a href="#实现接口的枚举类" class="headerlink" title="实现接口的枚举类"></a>实现接口的枚举类</h2><h1 id="注解的使用"><a href="#注解的使用" class="headerlink" title="注解的使用"></a>注解的使用</h1><h2 id="注解-Annotation-概述"><a href="#注解-Annotation-概述" class="headerlink" title="注解(Annotation)概述"></a>注解(Annotation)概述</h2><h2 id="常见的Annotation示例"><a href="#常见的Annotation示例" class="headerlink" title="常见的Annotation示例"></a>常见的Annotation示例</h2><h2 id="自定义Annotation"><a href="#自定义Annotation" class="headerlink" title="自定义Annotation"></a>自定义Annotation</h2><h2 id="JDK的元注解"><a href="#JDK的元注解" class="headerlink" title="JDK的元注解"></a>JDK的元注解</h2><h2 id="利用反射获取注解信息-在反射部分涉及"><a href="#利用反射获取注解信息-在反射部分涉及" class="headerlink" title="利用反射获取注解信息(在反射部分涉及)"></a>利用反射获取注解信息(在反射部分涉及)</h2><h2 id="JDK8中注解的新特性"><a href="#JDK8中注解的新特性" class="headerlink" title="JDK8中注解的新特性"></a>JDK8中注解的新特性</h2>]]></content>
       
       
+      <categories>
+          
+          <category> JavaNote </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+        </tags>
       
     </entry>
     
