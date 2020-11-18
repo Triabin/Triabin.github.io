@@ -1,0 +1,403 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第13章IO流 | Triabin</title><meta name="description" content="1.File类的使用2.IO流原理及流的分类3.节点流(或文件流)4.缓冲流5.转换流6.标准输入、输出流7.打印流8.数据流9.对象流10.随机存取文件流11.NIO.2中Path、Paths、Files类的使用"><meta name="keywords" content="Java"><meta name="author" content="Dawn Lee"><meta name="copyright" content="Dawn Lee"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://triabin.github.io/2020/11/17/%E7%AC%AC13%E7%AB%A0IO%E6%B5%81/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="第13章IO流"><meta property="og:url" content="https://triabin.github.io/2020/11/17/%E7%AC%AC13%E7%AB%A0IO%E6%B5%81/"><meta property="og:site_name" content="Triabin"><meta property="og:description" content="1.File类的使用2.IO流原理及流的分类3.节点流(或文件流)4.缓冲流5.转换流6.标准输入、输出流7.打印流8.数据流9.对象流10.随机存取文件流11.NIO.2中Path、Paths、Files类的使用"><meta property="og:image" content="https://gitee.com/Dawn_Lee/blogimg/raw/master/20201117192620.jpeg"><meta property="article:published_time" content="2020-11-17T11:21:14.000Z"><meta property="article:modified_time" content="2020-11-18T15:10:19.864Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
+
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
+
+var autoChangeMode = 'false'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime_unit: '天',
+  runtime: true,
+  copyright: undefined,
+  ClickShowText: {"text":"楼主,是,真的,帅","fontSize":"15px"},
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false    
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2020-11-18 23:10:19'
+}</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 5.0.0"></head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="https://gitee.com/Dawn_Lee/blogimg/raw/master/20200907120319.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">16</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">3</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div></div></div><div id="body-wrap"><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#File%E7%B1%BB%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">1.</span> <span class="toc-text">File类的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.</span> <span class="toc-text">概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%9E%84%E9%80%A0%E5%99%A8"><span class="toc-number">1.2.</span> <span class="toc-text">常用构造器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">1.3.</span> <span class="toc-text">常用方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%83%E4%B9%A0%E9%A2%98"><span class="toc-number">1.4.</span> <span class="toc-text">练习题</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#IO%E6%B5%81%E5%8E%9F%E7%90%86%E5%8F%8A%E6%B5%81%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-number">2.</span> <span class="toc-text">IO流原理及流的分类</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Java-IO%E5%8E%9F%E7%90%86"><span class="toc-number">2.1.</span> <span class="toc-text">Java IO原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%81%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-number">2.2.</span> <span class="toc-text">流的分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E6%B5%81%E5%92%8C%E5%A4%84%E7%90%86%E6%B5%81"><span class="toc-number">2.3.</span> <span class="toc-text">节点流和处理流</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#InputStream-amp-Reader"><span class="toc-number">2.4.</span> <span class="toc-text">InputStream &amp; Reader</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OutputStream-amp-Writer"><span class="toc-number">2.5.</span> <span class="toc-text">OutputStream &amp; Writer</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E6%B5%81-%E6%88%96%E6%96%87%E4%BB%B6%E6%B5%81"><span class="toc-number">3.</span> <span class="toc-text">节点流(或文件流)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BC%93%E5%86%B2%E6%B5%81"><span class="toc-number">4.</span> <span class="toc-text">缓冲流</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BD%AC%E6%8D%A2%E6%B5%81"><span class="toc-number">5.</span> <span class="toc-text">转换流</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%87%E5%87%86%E8%BE%93%E5%85%A5%E3%80%81%E8%BE%93%E5%87%BA%E6%B5%81"><span class="toc-number">6.</span> <span class="toc-text">标准输入、输出流</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%89%93%E5%8D%B0%E6%B5%81"><span class="toc-number">7.</span> <span class="toc-text">打印流</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%B5%81"><span class="toc-number">8.</span> <span class="toc-text">数据流</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E6%B5%81"><span class="toc-number">9.</span> <span class="toc-text">对象流</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9A%8F%E6%9C%BA%E5%AD%98%E5%8F%96%E6%96%87%E4%BB%B6%E6%B5%81"><span class="toc-number">10.</span> <span class="toc-text">随机存取文件流</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#NIO-2%E4%B8%ADPath%E3%80%81Paths%E3%80%81Files%E7%B1%BB%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">11.</span> <span class="toc-text">NIO.2中Path、Paths、Files类的使用</span></a></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://gitee.com/Dawn_Lee/blogimg/raw/master/20201117192446.jpg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">Triabin</a></span><span class="pull-right menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">第13章IO流</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-11-17T11:21:14.000Z" title="发表于 2020-11-17 19:21:14">2020-11-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2020-11-18T15:10:19.864Z" title="更新于 2020-11-18 23:10:19">2020-11-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/JavaNote/">JavaNote</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h1 id="File类的使用"><a href="#File类的使用" class="headerlink" title="File类的使用"></a>File类的使用</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul>
+<li><p>java.io.File类：<font color="red">文件和文件目录路径</font>的抽象表示形式，与平台无关。</p>
+</li>
+<li><p>File 能新建、删除、重命名文件和目录，但 File 不能访问文件内容本身。如果需要访问文件内容本身，则需要使用输入/输出流。</p>
+</li>
+<li><p><font color="red">想要在Java程序中表示一个真实存在的文件或目录，那么必须有一个File对象，但是Java程序中的一个File对象，可能没有一个真实存在的文件或目录。</font></p>
+</li>
+<li><p>File对象可以作为参数传递给流的构造器。</p>
+</li>
+<li><p>File类不涉及到写入或读取文件内容的操作。如果需要读取或写入文件内容，必须使用IO流。</p>
+<p>后续File类的对象常会作为参数传递到流的构造器中，指明读取或写入的“终点“</p>
+</li>
+</ul>
+<p><strong>路径分隔符</strong></p>
+<ul>
+<li><p>路径中的每级目录之间用一个路径分隔符隔开。</p>
+</li>
+<li><p>路径分隔符和系统有关：</p>
+<p>①windows和DOS系统默认使用“\”来表示</p>
+<p>②UNIX和URL使用“/”来表示</p>
+</li>
+<li><p>Java程序支持跨平台运行，因此路径分隔符要慎用，为了解决这个隐患，File类提供了一个常量：</p>
+<p>public static final String separator。根据操作系统，动态的提供分隔符。</p>
+</li>
+</ul>
+<p><strong>内存：</strong></p>
+<img src="https://gitee.com/Dawn_Lee/blogimg/raw/master/20201118164027.png" align="left">
+
+<h2 id="常用构造器"><a href="#常用构造器" class="headerlink" title="常用构造器"></a>常用构造器</h2><ul>
+<li>public File(String pathname)：以pathname为路径创建对象(绝对路径或相对路径)，相对路径默认当前路径为系统属性user.dir。<br><font color="red">说明：<br>IDEA中：<br>如果开发使用JUnit中的单元测试方法测试，相对路径即为当前Module下；<br>如果使用main()测试，相对路径即为当前的Project下。<br>Eclipse中：<br>不管是单元测试方法还是main()测试，相对路径都是当前的Project下。</font></li>
+<li>public File(String parent,String child)：以parent为父路径，child为子路径创建File对象。</li>
+<li>public File(File parent,String child)：根据一个父File对象和子文件路径创建File对象。</li>
+</ul>
+<h2 id="常用方法"><a href="#常用方法" class="headerlink" title="常用方法"></a>常用方法</h2><p><strong>File类的获取功能：</strong></p>
+<ol>
+<li><font color="red">public String getAbsolutePath()：</font>获取绝对路径</li>
+<li>public String getPath()：获取路径</li>
+<li>public String getName() ：获取名称</li>
+<li><font color="red">public String getParent()：</font>获取上层文件目录路径。若无，返回null</li>
+<li>public long length() ：获取文件长度（即：字节数）。不能获取目录的长度</li>
+<li>public long lastModified() ：获取最后一次的修改时间，毫秒值</li>
+<li>public String[] list()：获取指定目录下的所有文件或者文件目录的名称数组</li>
+<li>public File[] listFiles()：获取指定目录下的所有文件或者文件目录的File数组</li>
+</ol>
+<p><strong>File类的重命名功能：</strong></p>
+<ul>
+<li><p>public boolean renameTo(File dest)：把文件重命名为指定的文件路径</p>
+<p>比如file1.renameTo(file2)，要保证返回true，需要file1在硬盘中存在且file2在硬盘中不存在。修改可包括路径和文件内容。</p>
+</li>
+</ul>
+<p><strong>File类的判断功能：</strong></p>
+<ol>
+<li><font color="red">public boolean isDirectory()：</font>判断是否是文件目录</li>
+<li><font color="red">public boolean isFile()：</font>判断是否是文件</li>
+<li><font color="red">public boolean exists()：</font>判断是否存在</li>
+<li>public boolean canRead()：判断是否可读</li>
+<li>public boolean canWrite()：判断是否可写</li>
+<li>public boolean isHidden()：判断是否隐藏</li>
+</ol>
+<p><strong>File类的创建功能：</strong></p>
+<ol>
+<li><font color="red">public boolean createNewFile()：</font>创建文件。若文件存在，则不创建，返回false</li>
+<li><font color="red">public boolean mkdir()：</font>创建文件目录。如果此文件目录存在，就不创建了。如果此文件目录的上层目录不存在，也不创建。</li>
+<li><font color="red">public boolean mkdirs()：</font>创建文件目录。如果上层文件目录不存在，一并创建</li>
+</ol>
+<ul>
+<li><font color="red">注意事项：如果你创建文件或者文件目录没有写盘符路径，那么默认在项目路径下。</font></li>
+</ul>
+<p><strong>File类的删除功能：</strong></p>
+<ul>
+<li><p><font color="red">public boolean delete()：</font>删除文件或者文件夹</p>
+</li>
+<li><p><font color="blue">删除注意事项：</font></p>
+<p>①Java中的删除不走回收站；</p>
+<p>②要删除一个文件目录，请注意该文件目录内不能包含文件或文件目录。</p>
+</li>
+</ul>
+<h2 id="练习题"><a href="#练习题" class="headerlink" title="练习题"></a>练习题</h2><ol>
+<li><p>利用File构造器，new 一个文件目录file。</p>
+<p>1）在其中创建多个文件和目录</p>
+<p>2）编写方法，实现删除file中指定文件的操作</p>
+</li>
+<li><p>判断指定目录下是否有后缀名为.jpg的文件，如果有，就输出该文件名称。</p>
+</li>
+</ol>
+<ol start="3">
+<li><p>遍历指定目录所有文件名称，包括子文件目录中的文件。</p>
+<p>拓展1：并计算指定目录占用空间的大小</p>
+<p>拓展2：删除指定文件目录及其下的所有文件</p>
+</li>
+</ol>
+<h1 id="IO流原理及流的分类"><a href="#IO流原理及流的分类" class="headerlink" title="IO流原理及流的分类"></a>IO流原理及流的分类</h1><h2 id="Java-IO原理"><a href="#Java-IO原理" class="headerlink" title="Java IO原理"></a>Java IO原理</h2><ul>
+<li>I/O是Input/Output的缩写， I/O技术是非常实用的技术，用于处理设备之间的数据传输。如读/写文件，网络通讯等。</li>
+<li>Java程序中，对于数据的输入/输出操作以“流(stream)” 的方式进行的。</li>
+<li>java.io包下提供了各种“流”类和接口，用以获取不同种类的数据，并通过标准的方法输入或输出数据。</li>
+<li><strong>输入输出：</strong>进入内存即为输入(Input)，出内存即为输出(Output)。</li>
+</ul>
+<h2 id="流的分类"><a href="#流的分类" class="headerlink" title="流的分类"></a>流的分类</h2><ul>
+<li>按操作<font color="red">数据单位</font>不同分为：字节流(8 bit)，字符流(16 bit)。</li>
+<li>按数据流的<font color="red">流向</font>不同分为：输入流，输出流。</li>
+<li>按流的角色的不同分为：节点流，处理流。</li>
+</ul>
+<img src="https://gitee.com/Dawn_Lee/blogimg/raw/master/20201118221934.png" align="left">
+
+<table>
+<thead>
+<tr>
+<th align="center"><font color="red">(抽象基类)</font></th>
+<th align="center">字节流</th>
+<th align="center">字符流</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">输入流</td>
+<td align="center">InputStream</td>
+<td align="center">Reader</td>
+</tr>
+<tr>
+<td align="center">输出流</td>
+<td align="center">OutputStream</td>
+<td align="center">Writer</td>
+</tr>
+</tbody></table>
+<ul>
+<li>Java的IO流共涉及40多个类，实际上非常规则，都是从者4个类派生的，<font color="red">由这4个类派生出来的子类名称都是以其父类名作为子类名后缀</font>。</li>
+</ul>
+<p><strong>IO流体系</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">分类</th>
+<th align="center">字节输入流</th>
+<th align="center">字节输出流</th>
+<th align="center">字符输入流</th>
+<th align="center">字符输出流</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">抽象基类</td>
+<td align="center">InputStream</td>
+<td align="center">OutputStream</td>
+<td align="center">Reader</td>
+<td align="center">Writer</td>
+</tr>
+<tr>
+<td align="center">访问文件</td>
+<td align="center">FileInputStream</td>
+<td align="center">FileOutputStream</td>
+<td align="center">FileReader</td>
+<td align="center">FileWriter</td>
+</tr>
+<tr>
+<td align="center">访问数组</td>
+<td align="center">ByteArrayInputStream</td>
+<td align="center">ByteArrayOutputStream</td>
+<td align="center">CharArrayReader</td>
+<td align="center">CharArrayWriter</td>
+</tr>
+<tr>
+<td align="center">访问管道</td>
+<td align="center">PipedInputStream</td>
+<td align="center">PipedOutputStream</td>
+<td align="center">PipedReader</td>
+<td align="center">PipedWriter</td>
+</tr>
+<tr>
+<td align="center">访问字符串</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">StringReader</td>
+<td align="center">StringWriter</td>
+</tr>
+<tr>
+<td align="center">缓冲流</td>
+<td align="center">BufferedInputStream</td>
+<td align="center">BufferedOutputStream</td>
+<td align="center">BufferedReader</td>
+<td align="center">BufferedWriter</td>
+</tr>
+<tr>
+<td align="center">转换流</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">InputStreamReader</td>
+<td align="center">OutputStreamWriter</td>
+</tr>
+<tr>
+<td align="center">对象流</td>
+<td align="center">ObjectInputStream</td>
+<td align="center">ObjectOutputStream</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center">FilterInputStream</td>
+<td align="center">FilterOutputStream</td>
+<td align="center">FilterReader</td>
+<td align="center">FilterWriter</td>
+</tr>
+<tr>
+<td align="center">打印流</td>
+<td align="center"></td>
+<td align="center">PrintStream</td>
+<td align="center"></td>
+<td align="center">PrintWriter</td>
+</tr>
+<tr>
+<td align="center">推回输入流</td>
+<td align="center">PushbackInputStream</td>
+<td align="center"></td>
+<td align="center">PushbackReader</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">特殊流</td>
+<td align="center">DataInputStream</td>
+<td align="center">DataOutputStream</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<h2 id="节点流和处理流"><a href="#节点流和处理流" class="headerlink" title="节点流和处理流"></a>节点流和处理流</h2><ul>
+<li>节点流：直接从数据源或目的地读写数据。</li>
+</ul>
+<img src="https://gitee.com/Dawn_Lee/blogimg/raw/master/20201118224629.png" align="left">
+
+<ul>
+<li><p>处理流：不直接连接到数据源或目的地，而是“连接”在已存在的流(节点流或处理流)之上，通过对数据的处理为程序提供更为强大的读写功能。</p>
+<img src="https://gitee.com/Dawn_Lee/blogimg/raw/master/20201118224802.png" align="left">
+
+</li>
+</ul>
+<h2 id="InputStream-amp-Reader"><a href="#InputStream-amp-Reader" class="headerlink" title="InputStream &amp; Reader"></a>InputStream &amp; Reader</h2><ul>
+<li><p>InputStream和Reader是所有输入流的基类。</p>
+</li>
+<li><p>InputStream（典型实现：<font color="red">FileInputStream</font>）</p>
+<p>①int read()</p>
+<p><font color="red">②int read(byte[] b)</font></p>
+<p>③int read(byte[] b,int off,int len)</p>
+</li>
+<li><p>Reader（典型实现：<font color="red">FileReader</font>）</p>
+<p>①int read()</p>
+<p><font color="red">②int read(byte[] b)</font></p>
+<p>③int read(byte[] b,int off,int len)</p>
+</li>
+<li><p>程序中打开的文件IO资源不属于内存里的资源，垃圾回收机制无法回收该资源，所以应该显式关闭文件IO资源。</p>
+</li>
+<li><p>FileInputStream 从文件系统中的某个文件中获得输入字节。FileInputStream用于读取非文本数据之类的原始字节流。要读取字符流，需要使用FileReader。</p>
+</li>
+</ul>
+<p><strong>InputStream</strong></p>
+<ul>
+<li>int read()：从输入流中读取数据的下一个字节。返回0到255范围内的int字节值。如果因为已经到达流末尾而没有可用的字节，则返回值-1。</li>
+<li></li>
+</ul>
+<h2 id="OutputStream-amp-Writer"><a href="#OutputStream-amp-Writer" class="headerlink" title="OutputStream &amp; Writer"></a>OutputStream &amp; Writer</h2><h1 id="节点流-或文件流"><a href="#节点流-或文件流" class="headerlink" title="节点流(或文件流)"></a>节点流(或文件流)</h1><h1 id="缓冲流"><a href="#缓冲流" class="headerlink" title="缓冲流"></a>缓冲流</h1><h1 id="转换流"><a href="#转换流" class="headerlink" title="转换流"></a>转换流</h1><h1 id="标准输入、输出流"><a href="#标准输入、输出流" class="headerlink" title="标准输入、输出流"></a>标准输入、输出流</h1><h1 id="打印流"><a href="#打印流" class="headerlink" title="打印流"></a>打印流</h1><h1 id="数据流"><a href="#数据流" class="headerlink" title="数据流"></a>数据流</h1><h1 id="对象流"><a href="#对象流" class="headerlink" title="对象流"></a>对象流</h1><h1 id="随机存取文件流"><a href="#随机存取文件流" class="headerlink" title="随机存取文件流"></a>随机存取文件流</h1><h1 id="NIO-2中Path、Paths、Files类的使用"><a href="#NIO-2中Path、Paths、Files类的使用" class="headerlink" title="NIO.2中Path、Paths、Files类的使用"></a>NIO.2中Path、Paths、Files类的使用</h1></div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Dawn Lee</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://triabin.github.io/2020/11/17/%E7%AC%AC13%E7%AB%A0IO%E6%B5%81/">https://triabin.github.io/2020/11/17/%E7%AC%AC13%E7%AB%A0IO%E6%B5%81/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://triabin.github.io" target="_blank">Triabin</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Java/">Java</a></div><div class="post_share"><div class="social-share" data-image="https://gitee.com/Dawn_Lee/blogimg/raw/master/20201117192620.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏<div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" data-lazy-src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2020/11/16/%E7%AC%AC12%E7%AB%A0%E6%B3%9B%E5%9E%8B/"><img class="next-cover" data-lazy-src="https://gitee.com/Dawn_Lee/blogimg/raw/master/20201117192351.jpeg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">第12章泛型</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2020/11/16/第12章泛型/" title="第12章泛型"><img class="relatedPosts_cover" data-lazy-src="https://gitee.com/Dawn_Lee/blogimg/raw/master/20201117192351.jpeg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2020-11-16</div><div class="relatedPosts_title">第12章泛型</div></div></a></div><div class="relatedPosts_item"><a href="/2020/11/14/第11章集合/" title="第11章集合"><img class="relatedPosts_cover" data-lazy-src="https://gitee.com/Dawn_Lee/blogimg/raw/master/20201114192624.jpeg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2020-11-14</div><div class="relatedPosts_title">第11章集合</div></div></a></div><div class="relatedPosts_item"><a href="/2020/11/14/第10章枚举类与注解/" title="第10章枚举类与注解"><img class="relatedPosts_cover" data-lazy-src="https://gitee.com/Dawn_Lee/blogimg/raw/master/20201114121642.jpeg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2020-11-14</div><div class="relatedPosts_title">第10章枚举类与注解</div></div></a></div><div class="relatedPosts_item"><a href="/2020/10/31/第9章常用类/" title="第9章常用类"><img class="relatedPosts_cover" data-lazy-src="https://gitee.com/Dawn_Lee/blogimg/raw/master/20201101135247.jpeg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2020-10-31</div><div class="relatedPosts_title">第9章常用类</div></div></a></div><div class="relatedPosts_item"><a href="/2020/10/20/第8章多线程/" title="第8章多线程"><img class="relatedPosts_cover" data-lazy-src="https://gitee.com/Dawn_Lee/blogimg/raw/master/20201021210712.jpeg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2020-10-20</div><div class="relatedPosts_title">第8章多线程</div></div></a></div><div class="relatedPosts_item"><a href="/2020/10/03/第7章异常处理/" title="第7章异常处理"><img class="relatedPosts_cover" data-lazy-src="https://gitee.com/Dawn_Lee/blogimg/raw/master/20201003141102.jpeg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2020-10-03</div><div class="relatedPosts_title">第7章异常处理</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></article></main><footer id="footer" style="background-image: url(https://gitee.com/Dawn_Lee/blogimg/raw/master/20201117192446.jpg)" data-type="photo"><div id="footer-wrap"><div class="copyright">&copy;2020 By Dawn Lee</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">欢迎来<a href = "https://triabin.github.io">我的主页</a>玩耍！</div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font_plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font_minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    $.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js', function () {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'default',
+      })
+      false && mermaid.init()
+    })
+  }
+}</script><script>function loadValine () {
+  function initValine () {
+    window.valine = new Valine({
+      el: '#vcomment',
+      appId: 'nRm5ghh8KBTpFriUNsAIXkHX-gzGzoHsz',
+      appKey: 'MQA4jhYIWo2EHHXXwUXz3oOj',
+      placeholder: '记得留下你的昵称和邮箱……可以快速收到回复',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+    });
+    if ('nick,mail') { valine.config.requiredFields= 'nick,mail'.split(',') }
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else $.getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js', initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(() => loadValine(), 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><canvas class="fireworks"></canvas><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="/js/third-party/fireworks.js"></script><script defer="defer" id="ribbon_piao" mobile="false" src="/js/third-party/piao.js"></script><script src="/js/third-party/activate-power-mode.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script src="/js/third-party/click_heart.js" async="async"></script><script src="/js/third-party/ClickShowText.js" async="async"></script></div></body></html>
